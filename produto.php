@@ -1,18 +1,17 @@
 <?php
-$produtos = [
-    "camiseta-racing" => ["nome" => "Camiseta Racing", "preco" => 159.90, "preco_orig" => 199.90, "img" => "imgs/camiseta1.png"],
-    "camiseta-90" => ["nome" => "Camiseta 90", "preco" => 139.90, "preco_orig" => 179.90, "img" => "imgs/camiseta2.png"],
-    "calca-reta" => ["nome" => "Calça Reta", "preco" => 109.90, "preco_orig" => 139.90, "img" => "imgs/calca2.png"],
-    "jaqueta-de-moletom" => ["nome" => "Jaqueta de Moletom", "preco" => 129.90, "preco_orig" => null, "img" => "imgs/blusa3.png"],
-    "calca-cargo" => ["nome" => "Calça Cargo", "preco" => 120.00, "preco_orig" => null, "img" => "imgs/calca1.png"],
-    "calca-baggy-cargo" => ["nome" => "Calça Baggy Cargo", "preco" => 109.90, "preco_orig" => null, "img" => "imgs/calca3.png"],
-    "camiseta-de-gato" => ["nome" => "Camiseta de Gato", "preco" => 49.90, "preco_orig" => null, "img" => "imgs/camisetadogato.png"],
-    "jaqueta-puffer" => ["nome" => "Jaqueta Puffer", "preco" => 119.90, "preco_orig" => null, "img" => "imgs/blusa1.png"],
-    "jaqueta-y2k" => ["nome" => "Jaqueta Y2k", "preco" => 119.90, "preco_orig" => null, "img" => "imgs/blusa2.png"],
-];
+include 'conexao.php';
 
 $slug = $_GET['id'] ?? '';
-$p = $produtos[$slug] ?? null;
+
+$p = null;
+if ($slug !== '') {
+    $stmt = mysqli_prepare($conn, "SELECT * FROM vw_produtos_catalogo WHERE slug = ? LIMIT 1");
+    mysqli_stmt_bind_param($stmt, "s", $slug);
+    mysqli_stmt_execute($stmt);
+    $resultado = mysqli_stmt_get_result($stmt);
+    $p = mysqli_fetch_assoc($resultado);
+    mysqli_stmt_close($stmt);
+}
 
 $tituloPagina = $p ? strtoupper($p['nome']) . " - Gungnir Store" : "Gungnir Store";
 include 'templates/header.php';

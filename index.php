@@ -3,31 +3,21 @@ $tituloPagina = "Gungnir Store";
 include 'conexao.php';
 include 'templates/header.php';
 
-$produtos_extra = [
-    ["nome" => "Camiseta Racing", "slug" => "camiseta-racing", "preco" => 159.90, "preco_orig" => 199.90, "estoque" => 8, "img" => "imgs/camiseta1.png"],
-    ["nome" => "Camiseta 90", "slug" => "camiseta-90", "preco" => 139.90, "preco_orig" => 179.90, "estoque" => 7, "img" => "imgs/camiseta2.png"],
-    ["nome" => "Calça Reta", "slug" => "calca-reta", "preco" => 109.90, "preco_orig" => 139.90, "estoque" => 8, "img" => "imgs/calca2.png"],
-    ["nome" => "Jaqueta de Moletom", "slug" => "jaqueta-de-moletom", "preco" => 129.90, "preco_orig" => null, "estoque" => 6, "img" => "imgs/blusa3.png"],
-    ["nome" => "Calça Cargo", "slug" => "calca-cargo", "preco" => 120.00, "preco_orig" => null, "estoque" => 5, "img" => "imgs/calca1.png"],
-    ["nome" => "Calça Baggy Cargo", "slug" => "calca-baggy-cargo", "preco" => 109.90, "preco_orig" => null, "estoque" => 3, "img" => "imgs/calca3.png"],
-    ["nome" => "Camiseta de Gato", "slug" => "camiseta-de-gato", "preco" => 49.90, "preco_orig" => null, "estoque" => 0, "img" => "imgs/camisetadogato.png"],
-    ["nome" => "Jaqueta Puffer", "slug" => "jaqueta-puffer", "preco" => 119.90, "preco_orig" => null, "estoque" => 0, "img" => "imgs/blusa1.png"],
-    ["nome" => "Jaqueta Y2k", "slug" => "jaqueta-y2k", "preco" => 119.90, "preco_orig" => null, "estoque" => 0, "img" => "imgs/blusa2.png"],
-];
+$sql = "SELECT * FROM vw_produtos_catalogo ORDER BY ordem_exibicao, nome";
+$resultado = mysqli_query($conn, $sql);
 
-$sale = []; $normal = []; $soldout = [];
-foreach ($produtos_extra as $p) {
-    if ($p['estoque'] == 0) $soldout[] = $p;
-    elseif ($p['preco_orig'] !== null) $sale[] = $p;
-    else $normal[] = $p;
+$produtos_ordenados = [];
+if ($resultado) {
+    while ($linha = mysqli_fetch_assoc($resultado)) {
+        $produtos_ordenados[] = $linha;
+    }
 }
-$produtos_ordenados = array_merge($sale, $normal, $soldout);
 ?>
 
 <div class="row g-3 p-3" id="grid-produtos">
 <?php foreach ($produtos_ordenados as $p):
-    $sold_out = $p['estoque'] == 0;
-    $is_sale = $p['preco_orig'] !== null;
+    $sold_out = $p['status'] === 'esgotado';
+    $is_sale = $p['status'] === 'promocao';
 ?>
     <div class="col-4">
         <div class="produto-card <?= $sold_out ? 'sold-out' : '' ?>" onclick="<?= !$sold_out ? 'window.location=\'produto.php?id='.$p['slug'].'\'' : '' ?>">
