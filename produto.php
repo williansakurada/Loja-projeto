@@ -2,10 +2,10 @@
 include 'conexao.php';
 
 $slug = $_GET['id'] ?? '';
-
 $p = null;
+
 if ($slug !== '') {
-    $stmt = mysqli_prepare($conn, "SELECT * FROM vw_produtos_catalogo WHERE slug = ? LIMIT 1");
+    $stmt = mysqli_prepare($conexao, "SELECT * FROM vw_produtos_catalogo WHERE slug = ? LIMIT 1");
     mysqli_stmt_bind_param($stmt, "s", $slug);
     mysqli_stmt_execute($stmt);
     $resultado = mysqli_stmt_get_result($stmt);
@@ -22,7 +22,6 @@ if (!$p) {
     exit;
 }
 ?>
-
 <div class="produto-page">
     <div class="produto-imagem">
         <img src="<?= $p['img'] ?>" alt="<?= $p['nome'] ?>">
@@ -35,7 +34,6 @@ if (!$p) {
                 <span class="preco-orig">R$ <?= number_format($p['preco_orig'], 2, ',', '.') ?></span>
             <?php endif; ?>
         </div>
-
         <div class="tamanhos">
             <p class="tamanho-label">TAMANHO</p>
             <div class="tamanho-botoes">
@@ -44,9 +42,7 @@ if (!$p) {
                 <?php endforeach; ?>
             </div>
         </div>
-
         <div id="msg-erro" class="msg-erro d-none"></div>
-
         <button class="btn-carrinho" onclick="adicionarCarrinho()">
             <i class="bi bi-bag"></i> ADICIONAR AO CARRINHO
         </button>
@@ -171,7 +167,6 @@ function adicionarCarrinho() {
         msg.classList.remove('d-none');
         return;
     }
-
     var carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
     var item = {
         nome: "<?= addslashes($p['nome']) ?>",
@@ -179,15 +174,12 @@ function adicionarCarrinho() {
         img: "<?= $p['img'] ?>",
         tamanho: tamanhoSelecionado
     };
-
     carrinho.push(item);
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
     var msg = document.getElementById('msg-erro');
     msg.textContent = "Adicionado ao carrinho!";
     msg.className = "msg-erro sucesso";
     msg.classList.remove('d-none');
-
     setTimeout(function() {
         window.location.href = 'index.php';
     }, 1000);

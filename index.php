@@ -4,8 +4,7 @@ include 'conexao.php';
 include 'templates/header.php';
 
 $sql = "SELECT * FROM vw_produtos_catalogo ORDER BY ordem_exibicao, nome";
-$resultado = mysqli_query($conn, $sql);
-
+$resultado = mysqli_query($conexao, $sql);
 $produtos_ordenados = [];
 if ($resultado) {
     while ($linha = mysqli_fetch_assoc($resultado)) {
@@ -13,7 +12,6 @@ if ($resultado) {
     }
 }
 ?>
-
 <div class="row g-3 p-3" id="grid-produtos">
 <?php foreach ($produtos_ordenados as $p):
     $sold_out = $p['status'] === 'esgotado';
