@@ -48,7 +48,6 @@ if (!$p) {
         </button>
     </div>
 </div>
-
 <style>
 .produto-page {
     display: flex;
@@ -146,7 +145,6 @@ if (!$p) {
 .msg-erro.erro { background: #8b1a1a; color: #fff; }
 .msg-erro.sucesso { background: #1a4d1a; color: #fff; }
 </style>
-
 <script>
 var tamanhoSelecionado = null;
 
@@ -169,6 +167,7 @@ function adicionarCarrinho() {
     }
     var carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
     var item = {
+        produto_id: <?= $p['id'] ?>,
         nome: "<?= addslashes($p['nome']) ?>",
         preco: <?= $p['preco'] ?>,
         img: "<?= $p['img'] ?>",
@@ -185,5 +184,4 @@ function adicionarCarrinho() {
     }, 1000);
 }
 </script>
-
 <?php include 'templates/footer.php'; ?>

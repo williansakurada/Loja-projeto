@@ -82,7 +82,7 @@
             z-index: 200;
         }
         .overlay.ativo { display: block; }
-        .carrinho-sidebar {
+        .mini-carrinho-sidebar {
             position: fixed;
             top: 0; right: -450px;
             width: 420px;
@@ -93,35 +93,35 @@
             display: flex;
             flex-direction: column;
         }
-        .carrinho-sidebar.ativo { right: 0; }
-        .carrinho-header {
+        .mini-carrinho-sidebar.ativo { right: 0; }
+        .mini-carrinho-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 24px;
             border-bottom: 1px solid #eee;
         }
-        .carrinho-header span {
+        .mini-carrinho-header span {
             font-size: 0.85rem;
             font-weight: 900;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: #000;
         }
-        .fechar-carrinho {
+        .fechar-mini-carrinho {
             background: none;
             border: none;
             font-size: 1.3rem;
             color: #333;
             cursor: pointer;
         }
-        .fechar-carrinho:hover { color: #000; }
-        .carrinho-body {
+        .fechar-mini-carrinho:hover { color: #000; }
+        .mini-carrinho-body {
             flex: 1;
             overflow-y: auto;
             padding: 20px 24px;
         }
-        .carrinho-vazio {
+        .mini-carrinho-vazio {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -129,7 +129,7 @@
             height: 100%;
             text-align: center;
         }
-        .carrinho-titulo {
+        .mini-carrinho-titulo {
             font-size: 1rem;
             font-weight: 900;
             letter-spacing: 2px;
@@ -137,41 +137,41 @@
             margin-bottom: 16px;
             text-transform: uppercase;
         }
-        .carrinho-vazio p { font-size: 0.85rem; color: #555; }
-        .carrinho-vazio a { color: #000; text-decoration: underline; }
-        .carrinho-item {
+        .mini-carrinho-vazio p { font-size: 0.85rem; color: #555; }
+        .mini-carrinho-vazio a { color: #000; text-decoration: underline; }
+        .mini-carrinho-item {
             display: flex;
             gap: 12px;
             padding: 12px 0;
             border-bottom: 1px solid #eee;
             align-items: center;
         }
-        .carrinho-item img {
+        .mini-carrinho-item img {
             width: 70px;
             height: 70px;
             object-fit: contain;
             background: #f5f5f5;
         }
-        .carrinho-item-info { flex: 1; }
-        .carrinho-item-nome {
+        .mini-carrinho-item-info { flex: 1; }
+        .mini-carrinho-item-nome {
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
             color: #000;
         }
-        .carrinho-item-tamanho {
+        .mini-carrinho-item-tamanho {
             font-size: 0.75rem;
             color: #888;
             margin-top: 4px;
         }
-        .carrinho-item-preco {
+        .mini-carrinho-item-preco {
             font-size: 0.85rem;
             font-weight: 700;
             color: #000;
             margin-top: 4px;
         }
-        .carrinho-item-remover {
+        .mini-carrinho-item-remover {
             background: none;
             border: none;
             color: #999;
@@ -179,12 +179,12 @@
             font-size: 1rem;
             padding: 4px 8px;
         }
-        .carrinho-item-remover:hover { color: #000; }
-        .carrinho-footer {
+        .mini-carrinho-item-remover:hover { color: #000; }
+        .mini-carrinho-footer {
             padding: 20px 24px;
             border-top: 1px solid #eee;
         }
-        .carrinho-total {
+        .mini-carrinho-total {
             display: flex;
             justify-content: space-between;
             font-size: 0.9rem;
@@ -194,7 +194,7 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-        .btn-finalizar {
+        .btn-ir-carrinho {
             background: #000;
             color: #fff;
             border: none;
@@ -206,61 +206,63 @@
             cursor: pointer;
             transition: opacity 0.2s;
         }
-        .btn-finalizar:hover { opacity: 0.8; }
+        .btn-ir-carrinho:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
 <nav>
     <a class="nav-logo" href="index.php">Gungnir Store</a>
     <div class="nav-icons">
-        <a href="login.php"><i class="bi bi-person"></i></a>
-        <a href="#" onclick="abrirCarrinho(event)" style="position:relative">
+        <a href="<?= isset($_SESSION['cliente_id']) ? 'index.php' : 'login.php' ?>">
+            <i class="bi bi-person"></i>
+        </a>
+        <a href="#" onclick="abrirMiniCarrinho(event)" style="position:relative">
             <i class="bi bi-bag"></i>
             <span class="badge-carrinho" id="badge-carrinho" style="display:none">0</span>
         </a>
     </div>
 </nav>
 
-<div class="overlay" id="overlay" onclick="fecharCarrinho()"></div>
+<div class="overlay" id="mini-carrinho-overlay" onclick="fecharMiniCarrinho()"></div>
 
-<div class="carrinho-sidebar" id="carrinho-sidebar">
-    <div class="carrinho-header">
+<div class="mini-carrinho-sidebar" id="mini-carrinho-sidebar">
+    <div class="mini-carrinho-header">
         <span>Carrinho</span>
-        <button class="fechar-carrinho" onclick="fecharCarrinho()">✕</button>
+        <button class="fechar-mini-carrinho" onclick="fecharMiniCarrinho()">✕</button>
     </div>
-    <div class="carrinho-body" id="carrinho-body">
-        <div class="carrinho-vazio" id="carrinho-vazio">
-            <h2 class="carrinho-titulo">O Carrinho está vazio</h2>
+    <div class="mini-carrinho-body" id="mini-carrinho-body">
+        <div class="mini-carrinho-vazio">
+            <h2 class="mini-carrinho-titulo">O Carrinho está vazio</h2>
             <p>Já tem conta? <a href="login.php">Faça login</a> para finalizar a compra mais rápido.</p>
         </div>
     </div>
-    <div class="carrinho-footer" id="carrinho-footer" style="display:none">
-        <div class="carrinho-total">
+    <div class="mini-carrinho-footer" id="mini-carrinho-footer" style="display:none">
+        <div class="mini-carrinho-total">
             <span>Total</span>
-            <span id="carrinho-total-valor">R$ 0,00</span>
+            <span id="mini-carrinho-total-valor">R$ 0,00</span>
         </div>
-        <button class="btn-finalizar" onclick="window.location.href='cadastro.php'">FINALIZAR COMPRA</button>
+        <button class="btn-ir-carrinho" onclick="window.location.href='carrinho.php'">VER CARRINHO E FINALIZAR</button>
     </div>
 </div>
 
 <script>
-function abrirCarrinho(e) {
+function abrirMiniCarrinho(e) {
     e.preventDefault();
-    renderizarCarrinho();
-    document.getElementById("carrinho-sidebar").classList.add("ativo");
-    document.getElementById("overlay").classList.add("ativo");
+    renderizarMiniCarrinho();
+    document.getElementById("mini-carrinho-sidebar").classList.add("ativo");
+    document.getElementById("mini-carrinho-overlay").classList.add("ativo");
 }
 
-function fecharCarrinho() {
-    document.getElementById("carrinho-sidebar").classList.remove("ativo");
-    document.getElementById("overlay").classList.remove("ativo");
+function fecharMiniCarrinho() {
+    document.getElementById("mini-carrinho-sidebar").classList.remove("ativo");
+    document.getElementById("mini-carrinho-overlay").classList.remove("ativo");
 }
 
-function removerItem(index) {
+function removerItemMiniCarrinho(index) {
     var carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
     carrinho.splice(index, 1);
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
-    renderizarCarrinho();
+    renderizarMiniCarrinho();
     atualizarBadge();
 }
 
@@ -275,15 +277,14 @@ function atualizarBadge() {
     }
 }
 
-function renderizarCarrinho() {
+function renderizarMiniCarrinho() {
     var carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
-    var body = document.getElementById('carrinho-body');
-    var vazio = document.getElementById('carrinho-vazio');
-    var footer = document.getElementById('carrinho-footer');
+    var body = document.getElementById('mini-carrinho-body');
+    var footer = document.getElementById('mini-carrinho-footer');
     var badge = document.getElementById('badge-carrinho');
 
     if (carrinho.length === 0) {
-        body.innerHTML = '<div class="carrinho-vazio"><h2 class="carrinho-titulo">O Carrinho está vazio</h2><p>Já tem conta? <a href="login.php">Faça login</a> para finalizar a compra mais rápido.</p></div>';
+        body.innerHTML = '<div class="mini-carrinho-vazio"><h2 class="mini-carrinho-titulo">O Carrinho está vazio</h2><p>Já tem conta? <a href="login.php">Faça login</a> para finalizar a compra mais rápido.</p></div>';
         footer.style.display = 'none';
         badge.style.display = 'none';
         return;
@@ -296,20 +297,20 @@ function renderizarCarrinho() {
     var html = '';
     var total = 0;
     carrinho.forEach(function(item, index) {
-        total += item.preco;
-        html += '<div class="carrinho-item">';
+        total += Number(item.preco);
+        html += '<div class="mini-carrinho-item">';
         html += '<img src="' + item.img + '" alt="' + item.nome + '">';
-        html += '<div class="carrinho-item-info">';
-        html += '<p class="carrinho-item-nome">' + item.nome + '</p>';
-        html += '<p class="carrinho-item-tamanho">Tamanho: ' + item.tamanho + '</p>';
-        html += '<p class="carrinho-item-preco">R$ ' + item.preco.toFixed(2).replace('.', ',') + '</p>';
+        html += '<div class="mini-carrinho-item-info">';
+        html += '<p class="mini-carrinho-item-nome">' + item.nome + '</p>';
+        html += '<p class="mini-carrinho-item-tamanho">Tamanho: ' + item.tamanho + '</p>';
+        html += '<p class="mini-carrinho-item-preco">R$ ' + Number(item.preco).toFixed(2).replace('.', ',') + '</p>';
         html += '</div>';
-        html += '<button class="carrinho-item-remover" onclick="removerItem(' + index + ')">✕</button>';
+        html += '<button class="mini-carrinho-item-remover" onclick="removerItemMiniCarrinho(' + index + ')">✕</button>';
         html += '</div>';
     });
 
     body.innerHTML = html;
-    document.getElementById('carrinho-total-valor').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    document.getElementById('mini-carrinho-total-valor').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
 }
 
 window.addEventListener('load', function() {
