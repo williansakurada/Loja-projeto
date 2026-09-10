@@ -1,26 +1,61 @@
 <?php
+session_start();
+include 'conexao.php';
+
+$erro = '';
+$email_valor = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email_valor = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+
+    if ($email_valor === '' || $senha === '') {
+        $erro = 'Preencha e-mail e senha.';
+    } else {
+        $stmt = mysqli_prepare($conexao, "SELECT id, nome, senha_hash FROM clientes WHERE email = ? LIMIT 1");
+        mysqli_stmt_bind_param($stmt, "s", $email_valor);
+        mysqli_stmt_execute($stmt);
+        $resultado = mysqli_stmt_get_result($stmt);
+        $cliente = mysqli_fetch_assoc($resultado);
+        mysqli_stmt_close($stmt);
+
+        if ($cliente && password_verify($senha, $cliente['senha_hash'])) {
+            $_SESSION['cliente_id'] = $cliente['id'];
+            $_SESSION['cliente_nome'] = $cliente['nome'];
+            header('Location: index.php');
+            exit;
+        } else {
+            $erro = 'E-mail ou senha incorretos.';
+        }
+    }
+}
+
 $tituloPagina = "Login - Gungnir Store";
 include 'templates/header.php';
 ?>
-
 <div class="login-container" id="tela-login">
     <h2 class="login-titulo">Entrar com email e senha</h2>
-    <div class="login-form">
+
+    <?php if ($erro !== ''): ?>
+        <div class="msg-erro"><?= $erro ?></div>
+    <?php endif; ?>
+
+    <form class="login-form" method="POST" action="login.php">
         <div class="campo">
             <label>E-mail</label>
-            <input type="email" placeholder="Ex.: exemplo@mail.com">
+            <input type="email" name="email" placeholder="Ex.: exemplo@mail.com" value="<?= htmlspecialchars($email_valor) ?>" required>
         </div>
         <div class="campo">
             <label>Senha</label>
             <div class="senha-wrapper">
-                <input type="password" id="senha" placeholder="Adicione sua senha">
+                <input type="password" name="senha" id="senha" placeholder="Adicione sua senha" required>
                 <i class="bi bi-eye-slash" id="toggle-senha" onclick="toggleSenha()"></i>
             </div>
         </div>
         <p class="esqueci"><a href="#" onclick="abrirEsqueci(event)">Esqueci minha senha</a></p>
-        <button class="btn-entrar">ENTRAR</button>
+        <button type="submit" class="btn-entrar">ENTRAR</button>
         <p class="cadastro">Não tem uma conta? <a href="cadastro.php">Cadastre-se</a></p>
-    </div>
+    </form>
 </div>
 
 <div class="overlay-modal" id="overlay-modal" onclick="fecharEsqueci()"></div>
@@ -91,7 +126,15 @@ main { display: flex; align-items: center; justify-content: center; }
 .cadastro { text-align: center; font-size: 0.9rem; color: #aaa; margin: 0; }
 .cadastro a { color: #8b1a1a; text-decoration: none; }
 .cadastro a:hover { text-decoration: underline; }
-
+.msg-erro {
+    background: #8b1a1a;
+    color: #fff;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    text-align: center;
+}
 .overlay-modal {
     display: none;
     position: fixed;
@@ -177,5 +220,4 @@ function fecharEsqueci(e) {
     document.getElementById("overlay-modal").classList.remove("ativo");
 }
 </script>
-
 <?php include 'templates/footer.php'; ?>
