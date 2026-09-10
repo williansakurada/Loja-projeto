@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
-include 'conexao.php';
+include '../conexao.php';
 
 $sql = "SELECT * FROM categorias";
 $resultado = mysqli_query($conexao, $sql);
