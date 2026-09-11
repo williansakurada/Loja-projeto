@@ -213,7 +213,7 @@
 <nav>
     <a class="nav-logo" href="index.php">Gungnir Store</a>
     <div class="nav-icons">
-        <a href="<?= isset($_SESSION['cliente_id']) ? 'index.php' : 'login.php' ?>">
+        <a href="<?= isset($_SESSION['cliente_id']) ? 'minha_conta.php' : 'login.php' ?>">
             <i class="bi bi-person"></i>
         </a>
         <a href="#" onclick="abrirMiniCarrinho(event)" style="position:relative">

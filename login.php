@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'conexao.php';
 
 $erro = '';
@@ -21,6 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cliente && password_verify($senha, $cliente['senha_hash'])) {
             $_SESSION['cliente_id'] = $cliente['id'];
             $_SESSION['cliente_nome'] = $cliente['nome'];
+
+            if (isset($_POST['lembrar'])) {
+                setcookie(session_name(), session_id(), time() + 60 * 60 * 24 * 30, '/');
+            }
+
             header('Location: index.php');
             exit;
         } else {
@@ -50,6 +56,10 @@ include 'templates/header.php';
                 <input type="password" name="senha" id="senha" placeholder="Adicione sua senha" required>
                 <i class="bi bi-eye-slash" id="toggle-senha" onclick="toggleSenha()"></i>
             </div>
+        </div>
+        <div class="campo-lembrar">
+            <input type="checkbox" id="lembrar" name="lembrar">
+            <label for="lembrar">Salvar login</label>
         </div>
         <p class="esqueci"><a href="#" onclick="abrirEsqueci(event)">Esqueci minha senha</a></p>
         <button type="submit" class="btn-entrar">ENTRAR</button>
@@ -107,6 +117,23 @@ main { display: flex; align-items: center; justify-content: center; }
     user-select: none;
 }
 .esqueci { text-align: right; margin: 0; }
+.campo-lembrar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: -8px;
+}
+.campo-lembrar input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #8b1a1a;
+}
+.campo-lembrar label {
+    font-size: 0.85rem;
+    color: #ccc;
+    cursor: pointer;
+}
 .esqueci a { color: #8b1a1a; font-size: 0.9rem; text-decoration: none; }
 .esqueci a:hover { text-decoration: underline; }
 .btn-entrar {
