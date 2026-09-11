@@ -34,7 +34,7 @@ CREATE TABLE produtos (
 
 INSERT INTO produtos (categoria_id, nome, slug, preco, preco_orig, estoque, img) VALUES
   (1, 'Camiseta Racing', 'camiseta-racing', 159.90, 199.90, 8, 'imgs/camiseta1.png'),
-  (1, 'Camiseta 90', 'camiseta-90', 139.90, 179.90, 7, 'imgs/camiseta2.png'),
+  (1, 'Camiseta 90', 'camiseta-90', 139.90, 1.7990, 7, 'imgs/camiseta2.png'),
   (2, 'Calça Reta', 'calca-reta', 109.90, 139.90, 8, 'imgs/calca2.png'),
   (3, 'Jaqueta de Moletom', 'jaqueta-de-moletom', 129.90, NULL, 6, 'imgs/blusa3.png'),
   (2, 'Calça Cargo', 'calca-cargo', 120.00, NULL, 5, 'imgs/calca1.png'),
