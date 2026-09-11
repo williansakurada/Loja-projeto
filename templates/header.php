@@ -241,7 +241,7 @@
             <span>Total</span>
             <span id="mini-carrinho-total-valor">R$ 0,00</span>
         </div>
-        <button class="btn-ir-carrinho" onclick="window.location.href='carrinho.php'">VER CARRINHO E FINALIZAR</button>
+        <button class="btn-ir-carrinho" onclick="window.location.href='checkout.php'">FINALIZAR COMPRA</button>
     </div>
 </div>
 

@@ -20,6 +20,8 @@ CREATE TABLE pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   cliente_id INT NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'pendente',
+  endereco VARCHAR(255) NULL,
+  forma_pagamento VARCHAR(30) NULL,
   criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_pedidos_cliente FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
